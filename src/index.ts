@@ -73,6 +73,24 @@ app.use("/contact", contactRoutes);
 app.use(express.static(path.join(__dirname, "../public")));
 
 // ===========================================
+// 🚀 Error handling middleware
+// ===========================================
+
+// testing route
+app.get("/error", (_, res) => {
+  throw new Error("Test error");
+});
+
+// error handler middleware
+app.use(function errorHandler(err: any, req: any, res: any, next: any) {
+  if (res?.headersSent) {
+    return next(err);
+  }
+  res.status(500);
+  res.render("error", { error: err });
+});
+
+// ===========================================
 // 🚀 Start the server
 // ===========================================
 
