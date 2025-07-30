@@ -2,13 +2,20 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 import userRoutes from "./routes/userRoutes";
 import taskRoutes from "./routes/taskRoutes";
+import contactRoutes from "./routes/contactRoutes";
 
 dotenv.config();
 
 const app = express();
+
+// ===========================================
+// 🚀 CORS configuration
+// ===========================================
+
 app.use(
   cors({
     origin(requestOrigin, callback) {
@@ -26,15 +33,42 @@ app.use(
     },
   })
 );
+
+// ===========================================
+// 🚀 JSON middleware
+// ===========================================
+
 app.use(express.json());
 
-// ✅ Basic root route (for browser testing)
+// ===========================================
+// 🚀 Basic root route (for browser testing)
+// ===========================================
+
 app.get("/", (_, res) => {
   res.send("API is working ✅");
 });
 
+// ===========================================
+// 🚀 API routes
+// ===========================================
+
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
+
+// ===========================================
+// 🚀 Template engine for render html pages
+// ===========================================
+
+// this line of code is only for tell express where to find the views
+app.set("views", path.join(__dirname, "views"));
+
+// this line of code is for tell express which template engine to use
+app.set("view engine", "ejs");
+app.use("/contact", contactRoutes);
+
+// ===========================================
+// 🚀 Start the server
+// ===========================================
 
 const PORT = process.env.PORT || 5000;
 
