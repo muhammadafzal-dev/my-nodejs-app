@@ -7,6 +7,7 @@ import path from "path";
 import userRoutes from "./routes/userRoutes";
 import taskRoutes from "./routes/taskRoutes";
 import contactRoutes from "./routes/contactRoutes";
+import subjectRoutes from "./routes/subjectRoutes";
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.get("/", (_, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/subjects", subjectRoutes);
 
 // ===========================================
 // 🚀 Template engine for render html pages
