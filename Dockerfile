@@ -1,4 +1,4 @@
-# Use Node 18 (or 20 if your local version is 20)
+# Use Node 20
 FROM node:20
 
 # Set working directory
