@@ -1,0 +1,39 @@
+name: 🚀 Build & Push Docker Image
+
+on:
+  push:
+    branches:
+      - main # or whichever branch you want to trigger the push
+  workflow_dispatch: # allows manual run
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout your code
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Docker Buildx (for multi-platform builds)
+      - name: 🔧 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 3: Login to Docker Hub
+      - name: 🔑 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 4: Build and push image
+      - name: 🐳 Build and Push to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-nodejs-app:latest
+
+      # Optional Step 5: Log success
+      - name: ✅ Done
+        run: echo "🎉 Docker image pushed to Docker Hub successfully!"
