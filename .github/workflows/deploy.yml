@@ -29,10 +29,10 @@ jobs:
             git pull origin main
 
             echo "Installing dependencies..."
-            npm install --production
+            yarn install --production
 
             echo "Building app..."
-            npm run build
+            yarn build
 
             echo "Restarting app with PM2..."
             pm2 restart all || pm2 start dist/index.js --name backend
