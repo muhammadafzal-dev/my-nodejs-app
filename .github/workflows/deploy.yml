@@ -1,9 +1,9 @@
-name: 🚀 Deploy Backend to EC2
+name: 🚀 Deploy TypeScript Backend to EC2
 
 on:
   push:
     branches:
-      - main # or your default branch
+      - main
 
 jobs:
   deploy:
@@ -13,6 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies & build (on CI)
+        run: |
+          yarn install
+          yarn build
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -20,25 +25,21 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 (upload built files)
         run: |
-          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /home/ubuntu/app-backend
+          # 1. Upload compiled dist + package.json
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa" dist package.json yarn.lock \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/your-backend-folder
 
-            echo "Installing typescript..."
-            npm install -g typescript
+          # 2. SSH into EC2 and restart app
+          ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ubuntu/your-backend-folder
 
-            echo "Pulling latest code..."
-            git pull origin main
-
-            echo "Installing dependencies..."
+            echo "Installing production dependencies..."
             yarn install --production
 
-            echo "Building app..."
-            yarn build
-
             echo "Restarting app with PM2..."
-            pm2 restart all || pm2 start dist/index.js --name backend
+            pm2 restart backend || pm2 start dist/index.js --name backend
 
             echo "✅ Deployment complete!"
           EOF
