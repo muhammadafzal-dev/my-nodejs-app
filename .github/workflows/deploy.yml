@@ -29,11 +29,11 @@ jobs:
         run: |
           # 1. Upload compiled dist + package.json
           rsync -avz -e "ssh -i ~/.ssh/id_rsa" dist package.json yarn.lock \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/your-backend-folder
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/app-backend
 
           # 2. SSH into EC2 and restart app
           ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /home/ubuntu/your-backend-folder
+            cd /home/ubuntu/app-backend
 
             echo "Installing production dependencies..."
             yarn install --production
