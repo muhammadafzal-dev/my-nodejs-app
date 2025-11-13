@@ -46,7 +46,7 @@ app.use(express.json());
 // ===========================================
 
 app.get("/", (_, res) => {
-  res.send("API is working ✅: test#1");
+  res.send("API is working ✅: test#2");
 });
 
 // ===========================================
