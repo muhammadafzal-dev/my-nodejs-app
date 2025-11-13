@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies..."
+      - npm install -g yarn
+      - yarn install
+  build:
+    commands:
+      - echo "Building TypeScript..."
+      - yarn build
+artifacts:
+  files:
+    - "**/*"
