@@ -15,7 +15,10 @@ then
 fi
 
 echo ">>> Restarting PM2 app"
-pm2 reload app-backend || pm2 start dist/index.js --name app-backend
+pm2 restart app-backend || pm2 start dist/index.js --name app-backend
+
+echo ">>> PM2 status"
+pm2 status
 
 echo ">>> Saving PM2 process"
 pm2 save
