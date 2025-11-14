@@ -4,9 +4,6 @@ set -e
 echo ">>> Fixing permissions before PM2 start"
 sudo chown -R ubuntu:ubuntu /home/ubuntu/app-backend
 
-echo ">>> Moving to app directory"
-cd /home/ubuntu/app-backend
-
 # Define the full path to the pm2 executable
 PM2_PATH=/home/ubuntu/.nvm/versions/node/v18.17.1/bin/pm2
 
@@ -21,8 +18,13 @@ echo ">>> Starting application with PM2"
 # Stop and delete the old process to ensure a clean start
 $PM2_PATH delete app-backend || echo "app-backend not found, continuing..."
 
+# Diagnostic: Print the contents of the .env file to the logs
+echo "--- Contents of .env file ---"
+cat /home/ubuntu/app-backend/.env || echo ".env file not found"
+echo "---------------------------"
+
 # Start the application
-$PM2_PATH start dist/index.js --name app-backend
+$PM2_PATH start /home/ubuntu/app-backend/dist/index.js --name app-backend --cwd /home/ubuntu/app-backend
 
 echo ">>> PM2 status"
 $PM2_PATH status
