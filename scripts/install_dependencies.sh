@@ -9,4 +9,4 @@ yarn install
 # Build the app
 yarn build
 
-yarn install --production --frozen-lockfile
+# yarn install --production --frozen-lockfile
