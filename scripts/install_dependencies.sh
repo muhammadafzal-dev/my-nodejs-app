@@ -4,16 +4,13 @@ set -e  # fail script on any error
 echo ">>> Fixing permissions"
 sudo chown -R ubuntu:ubuntu /home/ubuntu/app-backend
 
-echo ">>> Moving to app directory"
-cd /home/ubuntu/app-backend
-
 echo ">>> Ensuring correct permissions"
 sudo chown -R ubuntu:ubuntu /home/ubuntu/app-backend
 
 echo ">>> Installing production-only dependencies"
-yarn install --production --frozen-lockfile
+yarn --cwd /home/ubuntu/app-backend install --production --frozen-lockfile
 
-echo ">>> Copying .env file from backup"
-cp /home/ubuntu/app-backend-backup/.env /home/ubuntu/app-backend/ 2>/dev/null || true
+echo ">>> Linking .env file"
+ln -s /home/ubuntu/.env /home/ubuntu/app-backend/.env
 
 echo ">>> Install step completed successfully"

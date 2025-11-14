@@ -18,11 +18,6 @@ echo ">>> Starting application with PM2"
 # Stop and delete the old process to ensure a clean start
 $PM2_PATH delete app-backend || echo "app-backend not found, continuing..."
 
-# Diagnostic: Print the contents of the .env file to the logs
-echo "--- Contents of .env file ---"
-cat /home/ubuntu/app-backend/.env || echo ".env file not found"
-echo "---------------------------"
-
 # Start the application
 $PM2_PATH start /home/ubuntu/app-backend/dist/index.js --name app-backend --cwd /home/ubuntu/app-backend
 
